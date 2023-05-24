@@ -1,0 +1,311 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  labels:
+    app.kubernetes.io/component: kubevirt
+    app.kubernetes.io/managed-by: kubevirt-operator
+    kubevirt.io: virt-api-validator
+  name: virt-api-validator
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /launcher-eviction-validate
+      port: 443
+  failurePolicy: Ignore
+  matchPolicy: Exact
+  name: virt-launcher-eviction-interceptor.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - '*'
+    resources:
+    - pods/eviction
+    scope: '*'
+  sideEffects: NoneOnDryRun
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /virtualmachineinstances-validate-create
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: virtualmachineinstances-create-validator.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - kubevirt.io
+    apiVersions:
+    - v1alpha3
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - virtualmachineinstances
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /virtualmachineinstances-validate-update
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: virtualmachineinstances-update-validator.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - kube.io
+    apiVersions:
+    - v1alpha3
+    - v1
+    operations:
+    - UPDATE
+    resources:
+    - virtualmachineinstances
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /virtualmachines-validate
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: virtualmachine-validator.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - kubevirt.io
+    apiVersions:
+    - v1alpha3
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - virtualmachines
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /virtualmachinereplicaset-validate
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: virtualmachinereplicaset-validator.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - kubevirt.io
+    apiVersions:
+    - v1alpha3
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - virtualmachineinstancereplicasets
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /vmipreset-validate
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: virtualmachinepreset-validator.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - kubevirt.io
+    apiVersions:
+    - v1alpha3
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - virtualmachineinstancepresets
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /migration-validate-create
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: migration-create-validator.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - kubevirt.io
+    apiVersions:
+    - v1alpha3
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - virtualmachineinstancemigrations
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /migration-validate-update
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: migration-update-validator.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - kubevirt.io
+    apiVersions:
+    - v1alpha3
+    - v1
+    operations:
+    - UPDATE
+    resources:
+    - virtualmachineinstancemigrations
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /virtualmachinesnapshots-validate
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: virtualmachinesnapshot-validator.snapshot.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - snapshot.kubevirt.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - virtualmachinesnapshots
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /virtualmachinerestores-validate
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: virtualmachinerestore-validator.snapshot.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - snapshot.kubevirt.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - virtualmachinerestores
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5akNDQWJLZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFXTVJRd0VnWURWUVFERXd0cmRXSmwKZG1seWRDNXBiekFlRncweU1UQXpNVEV4TURNNE1EWmFGdzB5TVRBek1UZ3hNRE00TURaYU1CWXhGREFTQmdOVgpCQU1UQzJ0MVltVjJhWEowTG1sdk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnVxeTgwUmphWFF0QW8yOXFPYng0d3pEMzI0NlRLVDBvRzJkbW1iWTBHZTNCbVhydkoyVEhkeEpybjVGTmM2QisKWXBZQ0hVNy96dXhxb3lyeFhUWWJneVdkSG11QU1pdENGdFh3SXRtWVlRSW9zZDMwRDN1UEdhbFZndkVhUm9NMApqSTNYdE0wd0J6MGhTTy94NmxISHdvSUJtaTlua2tIVk1GVWdxd1UwWnc1OGpNNk1Pd0pSS25takE5VXcwZkJTCkFrcHVkblpmNWp0cWlPUXVLRVNrclBqanJ0cDhwSFZiZEozUjV3dExwSTJzQlJONHpDK2NHOFpVWXd5K0puUzQKdW1ITGZuYlNFekU0SGFYaExCUGdPc1dtQTh4R1hURnhSVENURXNyQkpaczloU0NhdEk0T2R0QzZucXFPbVh6QQo0WkZSQS9OUjg3Nldlc2ZlNFlpRml3SURBUUFCb3lNd0lUQU9CZ05WSFE4QkFmOEVCQU1DQXFRd0R3WURWUjBUCkFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFRMkNsZEdwZytZR2xIcVVQdThzcWhOTkoKdGNBNkQ3aUhsNUovSEFYRXprVHFYZmJSOC9JTk9yNzJDTzFwTHhTUGZlZlQxZmVKMFhRL0xHaUJZd2lFV0pnNQowOXZrcGwrQTQrbzFoNWQ1Mk1LUUtiSnQ1UXRuL0pDZ2dlWFZKUmYwVUt4a3lsc2ZHbnM0cEliSW8yWEswT0p0CkRCRzFPd2thMlFZZlRMbUJZTG9nUEFCQWNjNUhHaFZSM254ZTFpTGFLRGUzclpQSmk1emdzTmpPQXN6RGkxMkcKWFFXZ0F4T2ZYYkdtS2VpcFo4RG9JY0hsVm1xVWs4ejk3TFJpQTFjWUtZUFAwbjQya21nOXl0dzArOEZpWkxERgprY2RRVm1rZmxqQkRxYVVrRy96alVuL0JJeWFuU1JGUmVEdFZ1eWZvaG9JZUVKL2Q3ZUxrSXVwd2lmbzV0UT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    service:
+      name: virt-api
+      namespace: kubevirt
+      path: /status-validate
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: kubevirt-crd-status-validator.kubevirt.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - kubevirt.io
+    apiVersions:
+    - v1alpha3
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - virtualmachines/status
+    - virtualmachineinstancereplicasets/status
+    - virtualmachineinstancemigrations/status
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30

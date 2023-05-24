@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - role: ks-virt
+      when:
+      - "status.virtualization is not defined or status.servicemesh.virtualization is not defined or status.virtualization.status != 'enabled'"

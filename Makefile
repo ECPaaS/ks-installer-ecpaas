@@ -1,5 +1,5 @@
-REPO?=kubespheredev/ks-installer
-TAG:=$(shell git rev-parse --abbrev-ref HEAD | sed -e 's/\//-/g')-dev
+REPO?=ecpaas/ks-installer
+TAG?=v3.3.2
 
 build:
 	docker build . --file Dockerfile --tag $(REPO):$(TAG)

@@ -1,0 +1,24 @@
+---
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: kubevirt
+  namespace: kubevirt
+spec:
+  certificateRotateStrategy: {}
+  configuration:
+    developerConfiguration:
+      useEmulation: {{ virtualization.useEmulation | default(false) | lower }}
+{% if oldCpuAllocationRatio is defined %}
+      cpuAllocationRatio: {{ oldCpuAllocationRatio }}
+{% else %}
+      cpuAllocationRatio: {{ virtualization.cpuAllocationRatio | default(1) }}
+{% endif %}
+      featureGates:
+        - DataVolume
+        - Macvtap
+        - LiveMigration
+        - Snapshot
+        - HotplugVolumes
+  customizeComponents: {}
+  imagePullPolicy: IfNotPresent

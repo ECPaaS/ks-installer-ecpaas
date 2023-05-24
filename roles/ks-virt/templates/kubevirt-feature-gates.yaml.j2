@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubevirt-config
+  namespace: kubevirt
+  labels:
+    kubevirt.io: ""
+data:
+  debug.useEmulation: "{{ virtualization.useEmulation | default(false) | lower }}"
+  feature-gates: "DataVolume,Macvtap,LiveMigration,Snapshot,HotplugVolumes"
