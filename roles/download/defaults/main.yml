@@ -51,17 +51,18 @@ ks_version: >-
 
 #KubeSphere:
 ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-apiserver"
-ks_apiserver_tag: "{{ ks_version }}"
+ks_apiserver_tag: "{{ ecpaas_apisvr_ver | default(ks_version) }}"
 ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-controller-manager"
-ks_controller_manager_tag: "{{ ks_version }}"
+ks_controller_manager_tag: "{{ ecpaas_cmgr_ver | default(ks_version) }}"
 ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: "{{ ks_version }}"
 ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-alerting-migration"
 ks_alerting_migration_tag: "v3.1.0"
 ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-console"
-ks_console_tag: "{{ ks_version }}"
+ks_console_tag: "{{ ecpaas_console_ver | default(ks_version) }}"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
 ks_kubectl_tag: v1.22.0
+
 # kubectl versions
 ks_kubectl_versions:
   v1.22.0: v1.22.0
@@ -78,6 +79,29 @@ ks_installer_tag: "{{ ks_version }}"
 
 #ks_image_pull_policy: Always
 ks_image_pull_policy: IfNotPresent
+
+# for vm
+multus_repo: "{{ base_repo }}{{ namespace_override | default('nfvpe') }}/multus"
+multus_tag: stable
+
+kubevirt_version: "v0.50.0"
+virt_operator_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-operator"
+virt_api_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-api"
+virt_controller_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-controller"
+virt_handler_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-handler"
+virt_launcher_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-launcher"
+
+cdi_version: "v1.56.0"
+cdi_operator_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-operator"
+cdi_controller_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-controller"
+cdi_importer_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-importer"
+cdi_cloner_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-cloner"
+cdi_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-apiserver"
+cdi_uploadserver_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-uploadserver"
+cdi_uploadproxy_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-uploadproxy"
+
+### end for vm
+
 
 # kubefed, KubeSphere multiple cluster component
 kubefed_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"

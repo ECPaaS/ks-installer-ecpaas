@@ -1,0 +1,207 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: (devel)
+  creationTimestamp: null
+  name: imagetemplates.virtualization.ecpaas.io
+spec:
+  group: virtualization.ecpaas.io
+  names:
+    kind: ImageTemplate
+    listKind: ImageTemplateList
+    plural: imagetemplates
+    singular: imagetemplate
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ImageTemplate is a specification for a ImageTemplate resource
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ImageTemplateSpec is the spec for a ImageTemplate resource
+            properties:
+              attributes:
+                additionalProperties:
+                  type: string
+                description: Attributes include permission and other settings of imagetemplate
+                type: object
+              resources:
+                description: 'Resources represents the minimum resources the volume
+                  should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources'
+                properties:
+                  limits:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Limits describes the maximum amount of compute resources
+                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                    type: object
+                  requests:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Requests describes the minimum amount of compute
+                      resources required. If Requests is omitted for a container,
+                      it defaults to Limits if that is explicitly specified, otherwise
+                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                    type: object
+                type: object
+              source:
+                description: Source is the src of the data for the requested imagetemplate
+                properties:
+                  clone:
+                    description: ImageSourceClone provides the parameters to create
+                      a imagetemplate from an existing image
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    - namespace
+                    type: object
+                  disk:
+                    description: ImageSourceDisk provides the parameters to create
+                      a imagetemplate by Disk (cdi dataVolume)
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    - namespace
+                    type: object
+                  diskVolume:
+                    description: ImageSourceDisk provides the parameters to create
+                      a imagetemplate by diskVolume (ksv diskVolume)
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    - namespace
+                    type: object
+                  http:
+                    description: DataVolumeSourceHTTP can be either an http or https
+                      endpoint, with an optional basic auth user name and password,
+                      and an optional configmap containing additional CAs
+                    properties:
+                      certConfigMap:
+                        description: CertConfigMap is a configmap reference, containing
+                          a Certificate Authority(CA) public key, and a base64 encoded
+                          pem certificate
+                        type: string
+                      extraHeaders:
+                        description: ExtraHeaders is a list of strings containing
+                          extra headers to include with HTTP transfer requests
+                        items:
+                          type: string
+                        type: array
+                      secretExtraHeaders:
+                        description: SecretExtraHeaders is a list of Secret references,
+                          each containing an extra HTTP header that may include sensitive
+                          information
+                        items:
+                          type: string
+                        type: array
+                      secretRef:
+                        description: SecretRef A Secret reference, the secret should
+                          contain accessKeyId (user name) base64 encoded, and secretKey
+                          (password) also base64 encoded
+                        type: string
+                      url:
+                        description: URL is the URL of the http(s) endpoint
+                        type: string
+                    required:
+                    - url
+                    type: object
+                  registry:
+                    description: DataVolumeSourceRegistry provides the parameters
+                      to create a Data Volume from an registry source
+                    properties:
+                      certConfigMap:
+                        description: CertConfigMap provides a reference to the Registry
+                          certs
+                        type: string
+                      imageStream:
+                        description: ImageStream is the name of image stream for import
+                        type: string
+                      pullMethod:
+                        description: PullMethod can be either "pod" (default import),
+                          or "node" (node docker cache based import)
+                        type: string
+                      secretRef:
+                        description: SecretRef provides the secret reference needed
+                          to access the Registry source
+                        type: string
+                      url:
+                        description: 'URL is the url of the registry source (starting
+                          with the scheme: docker, oci-archive)'
+                        type: string
+                    type: object
+                type: object
+              storageClassName:
+                description: 'Name of the StorageClass required by the claim. More
+                  info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1'
+                type: string
+            required:
+            - source
+            type: object
+          status:
+            description: ImageTemplateStatus is the status for a ImageTemplateStatus
+              resource
+            properties:
+              created:
+                description: Created indicates if the dv is created in the cluster
+                type: boolean
+              err:
+                description: describe imagetemplate error
+                properties:
+                  message:
+                    type: string
+                  reason:
+                    type: string
+                type: object
+              ready:
+                description: Ready indicates if dv is ready
+                type: boolean
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

@@ -338,6 +338,10 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'ks-core.yaml'),
         os.path.join(privateDataDir, 'ks-core')
     ]
+    preInstallTasks['virt'] = [
+        os.path.join(playbookBasePath, 'virt.yaml'),
+        os.path.join(privateDataDir, 'virt')
+    ]
 
     for task, paths in preInstallTasks.items():
         pretask = ansible_runner.run(

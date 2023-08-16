@@ -42,6 +42,14 @@ If your Kubernetes cluster environment meets all requirements mentioned above, t
 
 ## To Start Deploying KubeSphere
 
+###
+###  Correct version
+In deploy/cluster-configuration.yaml, fix the version that you want
+```
+  ecpaas_console_ver: "v3.3.2" # image tag for ecpaas ks-console
+  ecpaas_apisvr_ver: ""       # image tag for ecpaas ks-api-server
+  ecpaas_cmgr_ver: ""         # image tag for ecpaas ks-control-manager
+```
 ### Minimal Installation
 
 ```bash

@@ -1,0 +1,70 @@
+---
+- name: Virtual | Getting Virtual installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "virt"
+
+- name: Virtual | Get KSV Config
+  shell: >
+    {{ bin_dir }}/kubectl get KubesphereVirtualization -n kubesphere-system ksv-config -o jsonpath='{.spec.configuration.ratio.cpu}'
+  register: ksv_ratio
+  failed_when: false
+  check_mode: false 
+  when:
+    - "oldCpuAllocationRatio is not defined"
+
+- set_fact:
+    oldCpuAllocationRatio: "{{ ksv_ratio.stdout }}"
+  when:
+    - "ksv_ratio.stderr == ''"
+    - "oldCpuAllocationRatio is not defined"
+
+- name: Virtual | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: virt, file: multus-daemonset.yml }
+    - { path: virt, file: custom-values-ksvirt.yaml }
+    - { path: virt/kubevirt, file: kubevirt-operator.yaml }
+    - { path: virt/kubevirt, file: cdi-operator.yaml }
+    - { path: virt/kubevirt, file: kubevirt-cr.yaml }
+
+- name: Virtual | Install multus-daemonset
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/virt/multus-daemonset.yml
+
+- name: Virtual | Install kubevirt
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/virt/kubevirt/{{ item }}
+  register: kubevirt_result
+  failed_when: "kubevirt_result.stderr and ('AlreadyExists' not in kubevirt_result.stderr or 'Warning' not in kubevirt_result.stderr)"
+  until: kubevirt_result is succeeded
+  retries: 5
+  delay: 5
+  loop:
+    - "kubevirt-operator.yaml"
+    - "cdi-operator.yaml"
+    - "kubevirt-cr.yaml"
+    - "cdi-cr.yaml"
+
+- name: Virtual | Update virtualmachine crd
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/virt/ksvirt/crds --force
+  register: job_result
+  failed_when: false
+
+- name: ks-virt | import ks-virt status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"virtualization": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: xximport
+  failed_when: "xximport.stderr and 'Warning' not in xximport.stderr"
+  until: xximport is succeeded
+  retries: 5
+  delay: 3
+
