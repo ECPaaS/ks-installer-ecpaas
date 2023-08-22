@@ -84,14 +84,14 @@ ks_image_pull_policy: IfNotPresent
 multus_repo: "{{ base_repo }}{{ namespace_override | default('nfvpe') }}/multus"
 multus_tag: stable
 
-kubevirt_version: "v0.50.0"
+kubevirt_version: "{{ ecpaas_kubevirt_ver | default('v0.50.0') }}"
 virt_operator_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-operator"
 virt_api_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-api"
 virt_controller_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-controller"
 virt_handler_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-handler"
 virt_launcher_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/virt-launcher"
 
-cdi_version: "v1.56.0"
+cdi_version: "{{ ecpaas_cdi_ver | default('v1.57.0-alpha1') }}"
 cdi_operator_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-operator"
 cdi_controller_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-controller"
 cdi_importer_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/kubevirt') }}/cdi-importer"

@@ -1,5 +1,5 @@
-REPO?=ecpaas/ks-installer
-TAG?=v3.3.2
+REPO?=ecpaas-dockerhub.ddns.net/kubesphere/ks-installer
+TAG?=ecpaas-v332
 
 build:
 	docker build . --file Dockerfile --tag $(REPO):$(TAG)
