@@ -316,8 +316,8 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: ecpaas/ks-installer:v3.3.2
-        imagePullPolicy: "Never"
+        image: ecpaas-dockerhub.ddns.net/kubesphere/ks-installer:ecpaas-v332
+        imagePullPolicy: "IfNotPresent"
         resources:
           limits:
             cpu: "1"

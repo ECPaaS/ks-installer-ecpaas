@@ -47,8 +47,10 @@ If your Kubernetes cluster environment meets all requirements mentioned above, t
 In deploy/cluster-configuration.yaml, fix the version that you want
 ```
   ecpaas_console_ver: "v3.3.2" # image tag for ecpaas ks-console
-  ecpaas_apisvr_ver: ""       # image tag for ecpaas ks-api-server
-  ecpaas_cmgr_ver: ""         # image tag for ecpaas ks-control-manager
+  ecpaas_apisvr_ver: ""        # image tag for ecpaas ks-api-server
+  ecpaas_cmgr_ver: ""          # image tag for ecpaas ks-control-manager
+  ecpaas_kubevirt_ver: ""      # image tag for ecpaas kubevirt
+  ecpaas_cdi_ver: ""           # image tag for ecpaas cdi
 ```
 ### Minimal Installation
 
