@@ -19,15 +19,15 @@ spec:
     #  sourceLabels:
     #  - __name__
     port: https
-    #relabelings:
-    #- action: replace
-    #  regex: (.*)
-    #  replacement: $1
-    #  sourceLabels:
-    #  - __meta_kubernetes_pod_node_name
-    #  targetLabel: instance
-    #- action: labeldrop
-    #  regex: (service|endpoint)
+    relabelings:
+    - action: replace
+      regex: (.*)
+      replacement: $1
+      sourceLabels:
+      - __meta_kubernetes_pod_node_name
+      targetLabel: instance
+    - action: labeldrop
+      regex: (service|endpoint)
     scheme: https
     tlsConfig:
       insecureSkipVerify: true
