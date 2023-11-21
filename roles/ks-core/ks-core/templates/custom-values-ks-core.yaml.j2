@@ -52,7 +52,7 @@ apiserver:
   resources:
     limits:
       cpu: {{ common.core.apiserver.resources.limits.cpu | default('1') }}
-      memory: {{ common.core.apiserver.resources.limits.memory | default('1024Mi') }}
+      memory: {{ common.core.apiserver.resources.limits.memory | default('2048Mi') }}
     requests:
       cpu: {{ common.core.apiserver.resources.requests.cpu | default('20m') }}
       memory: {{ common.core.apiserver.resources.requests.memory | default('100Mi') }}
@@ -119,3 +119,5 @@ tolerations:
     operator: Exists
     tolerationSeconds: 60
 {% endif %}
+
+

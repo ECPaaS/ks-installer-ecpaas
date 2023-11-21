@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: (devel)
+    controller-gen.kubebuilder.io/version: ""
   creationTimestamp: null
   name: imagetemplates.virtualization.ecpaas.io
 spec:
@@ -19,7 +19,7 @@ spec:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ImageTemplate is a specification for a ImageTemplate resource
+        description: ImageTemplate is the Schema for the diskvolumes API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -34,16 +34,16 @@ spec:
           metadata:
             type: object
           spec:
-            description: ImageTemplateSpec is the spec for a ImageTemplate resource
+            description: ImageTemplateSpec defines the desired state of ImageTemplate
             properties:
               attributes:
-                additionalProperties:
-                  type: string
-                description: Attributes include permission and other settings of imagetemplate
+                properties:
+                  public:
+                    type: boolean
                 type: object
               resources:
-                description: 'Resources represents the minimum resources the volume
-                  should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources'
+                description: Resources represents the minimum resources the volume
+                  should have.
                 properties:
                   limits:
                     additionalProperties:
@@ -52,8 +52,8 @@ spec:
                       - type: string
                       pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                       x-kubernetes-int-or-string: true
-                    description: 'Limits describes the maximum amount of compute resources
-                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                    description: Limits describes the maximum amount of compute resources
+                      allowed. Valid resource keys are "memory" and "cpu".
                     type: object
                   requests:
                     additionalProperties:
@@ -62,46 +62,22 @@ spec:
                       - type: string
                       pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                       x-kubernetes-int-or-string: true
-                    description: 'Requests describes the minimum amount of compute
-                      resources required. If Requests is omitted for a container,
-                      it defaults to Limits if that is explicitly specified, otherwise
-                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                    description: Requests is a description of the initial vmi resources.
+                      Valid resource keys are "memory" and "cpu".
                     type: object
                 type: object
               source:
-                description: Source is the src of the data for the requested imagetemplate
+                description: Source is the source of the volume.
                 properties:
                   clone:
-                    description: ImageSourceClone provides the parameters to create
-                      a imagetemplate from an existing image
+                    description: DataVolumeSourcePVC provides the parameters to create
+                      a Data Volume from an existing PVC
                     properties:
                       name:
+                        description: The name of the source PVC
                         type: string
                       namespace:
-                        type: string
-                    required:
-                    - name
-                    - namespace
-                    type: object
-                  disk:
-                    description: ImageSourceDisk provides the parameters to create
-                      a imagetemplate by Disk (cdi dataVolume)
-                    properties:
-                      name:
-                        type: string
-                      namespace:
-                        type: string
-                    required:
-                    - name
-                    - namespace
-                    type: object
-                  diskVolume:
-                    description: ImageSourceDisk provides the parameters to create
-                      a imagetemplate by diskVolume (ksv diskVolume)
-                    properties:
-                      name:
-                        type: string
-                      namespace:
+                        description: The namespace of the source PVC
                         type: string
                     required:
                     - name
@@ -117,19 +93,6 @@ spec:
                           a Certificate Authority(CA) public key, and a base64 encoded
                           pem certificate
                         type: string
-                      extraHeaders:
-                        description: ExtraHeaders is a list of strings containing
-                          extra headers to include with HTTP transfer requests
-                        items:
-                          type: string
-                        type: array
-                      secretExtraHeaders:
-                        description: SecretExtraHeaders is a list of Secret references,
-                          each containing an extra HTTP header that may include sensitive
-                          information
-                        items:
-                          type: string
-                        type: array
                       secretRef:
                         description: SecretRef A Secret reference, the secret should
                           contain accessKeyId (user name) base64 encoded, and secretKey
@@ -141,59 +104,22 @@ spec:
                     required:
                     - url
                     type: object
-                  registry:
-                    description: DataVolumeSourceRegistry provides the parameters
-                      to create a Data Volume from an registry source
-                    properties:
-                      certConfigMap:
-                        description: CertConfigMap provides a reference to the Registry
-                          certs
-                        type: string
-                      imageStream:
-                        description: ImageStream is the name of image stream for import
-                        type: string
-                      pullMethod:
-                        description: PullMethod can be either "pod" (default import),
-                          or "node" (node docker cache based import)
-                        type: string
-                      secretRef:
-                        description: SecretRef provides the secret reference needed
-                          to access the Registry source
-                        type: string
-                      url:
-                        description: 'URL is the url of the registry source (starting
-                          with the scheme: docker, oci-archive)'
-                        type: string
-                    type: object
                 type: object
-              storageClassName:
-                description: 'Name of the StorageClass required by the claim. More
-                  info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1'
-                type: string
             required:
             - source
             type: object
           status:
-            description: ImageTemplateStatus is the status for a ImageTemplateStatus
-              resource
+            description: ImageTemplateStatus defines the observed state of ImageTemplate
             properties:
               created:
-                description: Created indicates if the dv is created in the cluster
                 type: boolean
-              err:
-                description: describe imagetemplate error
-                properties:
-                  message:
-                    type: string
-                  reason:
-                    type: string
-                type: object
+              owner:
+                type: string
               ready:
-                description: Ready indicates if dv is ready
                 type: boolean
+              target:
+                type: string
             type: object
-        required:
-        - spec
         type: object
     served: true
     storage: true
