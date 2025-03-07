@@ -5,4 +5,5 @@
     - kubesphere-defaults
     - role: ks-virt
       when:
+      - "kubevirt is not defined or kubevirt == true"
       - "status.virtualization is not defined or status.servicemesh.virtualization is not defined or status.virtualization.status != 'enabled'"

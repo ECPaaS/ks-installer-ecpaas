@@ -1,3 +1,6 @@
+
+kubevirt:  {{ kubevirt | default(true) }}
+
 {% if master_num is defined and master_num != "0" %}
 replicaCount: {{ master_num }}
 {% else %}
