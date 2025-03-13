@@ -1,4 +1,4 @@
-REPO?=ecpaas-dockerhub.ddns.net/kubesphere/ks-installer
+REPO?=ecpaas-dockerhub.atan-networks.com.cn/kubesphere/ks-installer
 TAG?=ecpaas-v332
 
 build:
