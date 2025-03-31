@@ -21,23 +21,13 @@ spec:
   # ecpaas_kubevirt_ver: ""         # image tag for ecpaas kubevirt
   # ecpaas_cdi_ver: ""              # image tag for ecpaas cdi
   # kubevirt: false                 # set false to disable kubevirt installation (default: true)
-  
-  hideMenu:
-    clusterNavs:
-    - { name: vpcnetworks, isChildItem: false }
-    - { name: virtualization, isChildItem: false }
-    projectNavs:
-    - { name: virtualization, isChildItem: false }
 
-  # globalNavs
-  # clusterNavs
-  # accessNavs
-  # platformSettingsNavs
-  # workspaceNavs
-  # manageAppNavs
-  # projectNavs
-  # federatedProjectNavs
-  # devopsNavs
+  # hideMenu:                       # set false to disable VPC networks & virtualization Web UI
+  #   clusterNavs:
+  #   - { name: vpcnetworks, isChildItem: false }
+  #   - { name: virtualization, isChildItem: false }
+  #   projectNavs:
+  #   - { name: virtualization, isChildItem: false }
 
   etcd:
     monitoring: false       # Enable or disable etcd monitoring dashboard installation. You have to create a Secret for etcd before you enable it.
