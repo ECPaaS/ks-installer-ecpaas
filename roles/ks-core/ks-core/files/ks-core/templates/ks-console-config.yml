@@ -22,6 +22,63 @@ data:
         kubernetes: {{ .Values.kube_version }}
         openpitrix: {{ .Chart.AppVersion }}
       enableKubeConfig: true
+      {{- if .Values.hideMenu }}
+      hideMenu:
+        {{- if .Values.hideMenu.globalNavs }}
+        globalNavs:
+          {{- range .Values.hideMenu.globalNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hideMenu.clusterNavs }}
+        clusterNavs:
+          {{- range .Values.hideMenu.clusterNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hideMenu.accessNavs }}
+        accessNavs:
+          {{- range .Values.hideMenu.accessNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hideMenu.platformSettingsNavs }}
+        platformSettingsNavs:
+          {{- range .Values.hideMenu.platformSettingsNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hideMenu.workspaceNavs }}
+        workspaceNavs:
+          {{- range .Values.hideMenu.workspaceNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hideMenu.manageAppNavs }}
+        manageAppNavs:
+          {{- range .Values.hideMenu.manageAppNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hideMenu.projectNavs }}
+        projectNavs:
+          {{- range .Values.hideMenu.projectNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hideMenu.federatedProjectNavs }}
+        federatedProjectNavs:
+          {{- range .Values.hideMenu.federatedProjectNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+        {{- if .Values.hideMenu.devopsNavs }}
+        devopsNavs:
+          {{- range .Values.hideMenu.devopsNavs }}
+          - { name: {{ .name }}, isChildItem: {{ .isChildItem }} }
+          {{- end }}
+        {{- end }}
+      {{- end }}
     defaultClusterName: {{ .Values.console.defaultClusterName }}
 kind: ConfigMap
 metadata:

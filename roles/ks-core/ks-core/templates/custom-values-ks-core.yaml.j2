@@ -1,5 +1,53 @@
 
-kubevirt:  {{ kubevirt | default(true) }}
+kubevirt: {{ kubevirt | default(true) }}
+
+{% if hideMenu is defined and hideMenu is not none -%}
+hideMenu:
+  {% if hideMenu.globalNavs is defined and hideMenu.globalNavs is not none -%}
+  globalNavs:
+    {{ hideMenu.globalNavs | to_yaml | indent(4) }}
+  {%- endif %}
+
+  {% if hideMenu.clusterNavs is defined and hideMenu.clusterNavs is not none -%}
+  clusterNavs:
+    {{ hideMenu.clusterNavs | to_yaml | indent(4) }}
+  {%- endif %}
+
+  {% if hideMenu.accessNavs is defined and hideMenu.accessNavs is not none -%}
+  accessNavs:
+    {{ hideMenu.accessNavs | to_yaml | indent(4) }}
+  {%- endif %}
+
+  {% if hideMenu.platformSettingsNavs is defined and hideMenu.platformSettingsNavs is not none -%}
+  platformSettingsNavs:
+    {{ hideMenu.platformSettingsNavs | to_yaml | indent(4) }}
+  {%- endif %}
+
+  {% if hideMenu.workspaceNavs is defined and hideMenu.workspaceNavs is not none -%}
+  workspaceNavs:
+    {{ hideMenu.workspaceNavs | to_yaml | indent(4) }}
+  {%- endif %}
+
+  {% if hideMenu.manageAppNavs is defined and hideMenu.manageAppNavs is not none -%}
+  manageAppNavs:
+    {{ hideMenu.manageAppNavs | to_yaml | indent(4) }}
+  {%- endif %}
+
+  {% if hideMenu.projectNavs is defined and hideMenu.projectNavs is not none -%}
+  projectNavs:
+    {{ hideMenu.projectNavs | to_yaml | indent(4) }}
+  {%- endif %}
+
+  {% if hideMenu.federatedProjectNavs is defined and hideMenu.federatedProjectNavs is not none -%}
+  federatedProjectNavs:
+    {{ hideMenu.federatedProjectNavs | to_yaml | indent(4) }}
+  {%- endif %}
+
+  {% if hideMenu.devopsNavs is defined and hideMenu.devopsNavs is not none -%}
+  devopsNavs:
+    {{ hideMenu.devopsNavs | to_yaml | indent(4) }}
+  {%- endif %}
+{%- endif %}
 
 {% if master_num is defined and master_num != "0" %}
 replicaCount: {{ master_num }}
