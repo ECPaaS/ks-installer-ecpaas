@@ -23,11 +23,9 @@ spec:
   # kubevirt: false                 # set false to disable kubevirt installation (default: true)
 
   # hideMenu:                       # set false to disable VPC networks & virtualization Web UI
-  #   clusterNavs:
-  #   - { name: vpcnetworks, isChildItem: false }
-  #   - { name: virtualization, isChildItem: false }
-  #   projectNavs:
-  #   - { name: virtualization, isChildItem: false }
+  # - { navtitle: clusterNavs, name: vpcnetworks, isChildItem: false }
+  # - { navtitle: clusterNavs, name: virtualization, isChildItem: false }
+  # - { navtitle: projectNavs, name: virtualization, isChildItem: false }
 
   etcd:
     monitoring: false       # Enable or disable etcd monitoring dashboard installation. You have to create a Secret for etcd before you enable it.
