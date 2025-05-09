@@ -1,0 +1,14 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: HelmRepo
+metadata:
+  annotations:
+    app.kubesphere.io/sync-period: "3600s"
+    kubesphere.io/creator: admin
+  labels:
+    kubesphere.io/workspace: system-workspace
+  name: builtin-nocsys
+spec:
+  credential: {}
+  name: built-nocsys
+  syncPeriod: 3600
+  url: https://nocsyshelmrepo.github.io/nocsys-helm-chart

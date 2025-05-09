@@ -12,6 +12,7 @@
   with_items:
     - { path: openpitrix, file: ks-openpitrix-import.yaml }
     - { path: openpitrix, file: builtin-repo.yaml }
+    - { path: openpitrix, file: builtin-nocsys.yaml }
 
 - name: OpenPitrix | Check OpenPitrix v3.0.0
   shell: >
@@ -51,3 +52,8 @@
   when:
     - builtin_repo_output.stdout is not defined or builtin_repo_output.stdout == ""
 
+- name: OpenPitrix | Create builtin nocsys repo
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/builtin-nocsys.yaml
+  when:
+    - builtin_repo_output.stdout is not defined or builtin_repo_output.stdout == ""
