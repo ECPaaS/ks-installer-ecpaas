@@ -1,8 +1,12 @@
 ---
+- name: Set gatekeeper chart directory based on version
+  set_fact:
+    gatekeeper_chart_dir: "{{ 'gatekeeper-3-18-3' if gatekeeper.version == 'v3.18.3' else 'gatekeeper' }}"
+
 - name: GateKeeper | Getting GateKeeper installation files
   copy:
-    src: "gatekeeper"
-    dest: "{{ kubesphere_dir }}/"
+    src: "{{ gatekeeper_chart_dir }}/"
+    dest: "{{ kubesphere_dir }}/gatekeeper/"
 
 - name: GateKeeper | Creating manifests
   template:

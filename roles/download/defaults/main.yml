@@ -124,7 +124,7 @@ edge_service_tag: "v0.2.0"
 
 # gatekeeper
 gatekeeper_repo: "{{ base_repo }}{{ namespace_override | default('openpolicyagent') }}/gatekeeper"
-gatekeeper_release: "v3.5.2"
+gatekeeper_release: "{{ gatekeeper.version | default('v3.5.2') }}"
 
 #openpitrix:
 openpitrix_job_tag: "v3.3.2"
