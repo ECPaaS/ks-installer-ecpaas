@@ -7,4 +7,4 @@ metadata:
     kubevirt.io: ""
 data:
   debug.useEmulation: "{{ virtualization.useEmulation | default(false) | lower }}"
-  feature-gates: "DataVolume,Macvtap,LiveMigration,Snapshot,HotplugVolumes"
+  feature-gates: "DataVolume,Macvtap,LiveMigration,Snapshot,HotplugVolumes,ExpandDisks"
