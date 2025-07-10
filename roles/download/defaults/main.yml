@@ -325,6 +325,15 @@ bookinfo_ratings_v1_tag: "{{ examples_ratings_version }}"
 waveworks_scop_repo: "{{ base_repo }}{{ namespace_override | default('weaveworks') }}/scope"
 waveworks_scop_tag: "1.13.0"
 
+#vpa
+vpa_version: 1.4.1
+vpa_admission_controller_repo: "{{ base_repo }}{{ namespace_override | default('registry.k8s.io/autoscaling') }}/vpa-admission-controller"
+vpa_admission_controller_tag: "{{ vpa_version }}"
+vpa_updater_repo: "{{ base_repo }}{{ namespace_override | default('registry.k8s.io/autoscaling') }}/vpa-updater"
+vpa_updater_tag: "{{ vpa_version }}"
+vpa_recommender_repo: "{{ base_repo }}{{ namespace_override | default('registry.k8s.io/autoscaling') }}/vpa-recommender"
+vpa_recommender_tag: "{{ vpa_version }}"
+
 images:
   ks_installer:
     repo: "{{ ks_installer_repo }}"
@@ -1039,6 +1048,24 @@ images:
     tag: "{{ waveworks_scop_tag }}"
     sha256: "{{ waveworks_scop_checksum|default(None) }}"
     group: "weave-scope-images"
+
+  vpa_admission_controller:
+    repo: "{{ vpa_admission_controller_repo }}"
+    tag: "{{ vpa_admission_controller_tag }}"
+    sha256: "{{ vpa_admission_controller_checksum|default(None) }}"
+    group: "vpa-images"
+
+  vpa_updater:
+    repo: "{{ vpa_updater_repo }}"
+    tag: "{{ vpa_updater_tag }}"
+    sha256: "{{ vpa_updater_checksum|default(None) }}"
+    group: "vpa-images"
+
+  vpa_recommender:
+    repo: "{{ vpa_recommender_repo }}"
+    tag: "{{ vpa_recommender_tag }}"
+    sha256: "{{ vpa_recommender_checksum|default(None) }}"
+    group: "vpa-images"
 
 image_default:
   repo: ""
