@@ -1,0 +1,52 @@
+---
+- name: VPA | Getting VPA installation files
+  copy:
+    src: "vpa/"
+    dest: "{{ kubesphere_dir }}/vpa/"
+
+- name: VPA | Generating certs
+  shell: >
+    /bin/bash {{ kubesphere_dir }}/vpa/gencerts.sh
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: VPA | Installing VPA service
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/vpa/admission-controller-service.yaml
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: VPA | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: vpa, file: admission-controller-deployment.yaml }
+    - { path: vpa, file: recommender-deployment.yaml }
+    - { path: vpa, file: updater-deployment.yaml }
+
+- name: VPA | Installing VPA CRD
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/vpa/{{ item }}"
+  loop:
+    - "vpa-v1-crd-gen.yaml"
+    - "vpa-rbac.yaml"
+    - "updater-deployment.yaml"
+    - "recommender-deployment.yaml"
+    - "admission-controller-deployment.yaml"
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: VPA | Importing VPA status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"vpa": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3

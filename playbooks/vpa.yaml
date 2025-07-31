@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - role: vpa
+      when:
+        - "vpa is defined and vpa.enabled == true"
+        - "status.vpa is not defined or status.vpa.status is not defined or status.vpa.status != 'enabled'"
