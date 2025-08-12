@@ -342,6 +342,10 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'virt.yaml'),
         os.path.join(privateDataDir, 'virt')
     ]
+    preInstallTasks['pvcviewer'] = [
+        os.path.join(playbookBasePath, 'pvcviewer.yaml'),
+        os.path.join(privateDataDir, 'pvcviewer')
+    ]
 
     for task, paths in preInstallTasks.items():
         pretask = ansible_runner.run(

@@ -1,0 +1,13 @@
+---
+- name: PVC viewer | Getting PVC viewer installation files
+  copy:
+    src: "pvcviewer/"
+    dest: "{{ kubesphere_dir }}/pvcviewer/"
+
+- name: PVC viewer | Installing PVC viewer CRD 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/pvcviewer/{{ item }}"
+  loop:
+    - "file.ecpaas.io_pvcviewers.yaml"
+  register: result
+  until: result is succeeded
+  retries: 3
