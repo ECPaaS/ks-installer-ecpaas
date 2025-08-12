@@ -1,0 +1,13 @@
+---
+- name: PVC Clone | Getting PVC Clone installation files
+  copy:
+    src: "pvcclone/"
+    dest: "{{ kubesphere_dir }}/pvcclone/"
+
+- name: PVC Clone | Installing PVC Clone CRD
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/pvcclone/{{ item }}"
+  loop:
+    - "pvc.ecpaas.io_pvcclonerequests.yaml"
+  register: result
+  until: result is succeeded
+  retries: 3
