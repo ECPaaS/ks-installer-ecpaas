@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - role: kyverno
+      when:
+        - "kyverno is defined and kyverno.enabled == true"
+        - "status.kyverno is not defined or status.kyverno.status is not defined or status.kyverno.status != 'enabled'"
