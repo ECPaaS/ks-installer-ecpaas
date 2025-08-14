@@ -347,8 +347,8 @@ def preInstallTasks():
         os.path.join(privateDataDir, 'pvcviewer')
     ]
     preInstallTasks['pvcclone'] = [
-    os.path.join(playbookBasePath, 'pvcclone.yaml'),
-    os.path.join(privateDataDir, 'pvcclone')
+        os.path.join(playbookBasePath, 'pvcclone.yaml'),
+        os.path.join(privateDataDir, 'pvcclone')
     ]
 
     for task, paths in preInstallTasks.items():
