@@ -346,6 +346,10 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'pvcviewer.yaml'),
         os.path.join(privateDataDir, 'pvcviewer')
     ]
+    preInstallTasks['kyverno'] = [
+        os.path.join(playbookBasePath, 'kyverno.yaml'),
+        os.path.join(privateDataDir, 'kyverno')
+    ]
     preInstallTasks['vpa'] = [
         os.path.join(playbookBasePath, 'vpa.yaml'),
         os.path.join(privateDataDir, 'vpa')

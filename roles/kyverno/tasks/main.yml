@@ -1,0 +1,33 @@
+---
+- name: Kyverno | Getting Kyverno installation files
+  copy:
+    src: "kyverno/"
+    dest: "{{ kubesphere_dir }}/kyverno/"
+
+- name: Kyverno | Checking Kyverno
+  shell: >
+    {{ bin_dir }}/helm list -n kyverno | grep "kyverno"
+  register: kyverno_check
+  failed_when: false
+
+- block:
+    - name: Kyverno | Deploying Kyverno
+      shell: >
+        {{ bin_dir }}/helm upgrade --install kyverno
+        {{ kubesphere_dir }}/kyverno/kyverno-3.5.0.tgz
+        --namespace kyverno --create-namespace
+      failed_when: false
+  when:
+    - (kyverno_check.stdout.find("deployed") == -1) or (kyverno_check.stdout.find("v1.15.0") == -1)
+
+- name: Kyverno | Importing Kyverno status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"kyverno": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3
