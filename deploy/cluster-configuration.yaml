@@ -198,3 +198,5 @@ spec:
     timeout: 600         # Container timeout, if set to 0, no timeout will be used. The unit is seconds
   vpa: # Install Kubernetes VPA CRDs, deployments and services
     enabled: false   # Enable or disable VPA.
+  kyverno: # Install Kyverno
+    enabled: false   # Enable or disable Kyverno.

@@ -350,6 +350,14 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'pvcclone.yaml'),
         os.path.join(privateDataDir, 'pvcclone')
     ]
+    preInstallTasks['kyverno'] = [
+        os.path.join(playbookBasePath, 'kyverno.yaml'),
+        os.path.join(privateDataDir, 'kyverno')
+    ]
+    preInstallTasks['vpa'] = [
+        os.path.join(playbookBasePath, 'vpa.yaml'),
+        os.path.join(privateDataDir, 'vpa')
+    ]
 
     for task, paths in preInstallTasks.items():
         pretask = ansible_runner.run(
