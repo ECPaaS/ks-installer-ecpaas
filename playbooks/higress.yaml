@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - role: higress
+      when:
+        - "higress is defined and higress.enabled == true"
+        - "status.higress is not defined or status.higress.status is not defined or status.higress.status != 'enabled'"

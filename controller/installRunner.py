@@ -358,6 +358,10 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'vpa.yaml'),
         os.path.join(privateDataDir, 'vpa')
     ]
+    preInstallTasks['higress'] = [
+        os.path.join(playbookBasePath, 'higress.yaml'),
+        os.path.join(privateDataDir, 'higress')
+    ]
 
     for task, paths in preInstallTasks.items():
         pretask = ansible_runner.run(

@@ -200,3 +200,5 @@ spec:
     enabled: false   # Enable or disable VPA.
   kyverno: # Install Kyverno
     enabled: false   # Enable or disable Kyverno.
+  higress: # Install Higress
+    enabled: false   # Enable or disable Higress.

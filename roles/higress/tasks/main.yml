@@ -1,0 +1,51 @@
+---
+- name: Higress | Getting Higress installation files
+  copy:
+    src: "higress/"
+    dest: "{{ kubesphere_dir }}/higress/"
+
+- name: Higress | Getting Gateway API installation files
+  copy:
+    src: "crds/"
+    dest: "{{ kubesphere_dir }}/higress/"
+
+- name: Higress | Installing Gateway API CRDs
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/higress/gateway-api-v1.1.1-experimental-install.yaml
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: Higress | Checking Higress
+  shell: >
+    {{ bin_dir }}/helm list -n higress-system | grep "higress"
+  register: higress_check
+  failed_when: false
+
+- block:
+    - name: Higress | Deploying Higress
+      shell: >
+        {{ bin_dir }}/helm upgrade --install higress
+        {{ kubesphere_dir }}/higress/higress-2.1.7.tgz
+        --namespace higress-system --create-namespace
+        --render-subchart-notes
+        --set global.local=true
+        --set global.o11y.enabled=false
+        --set global.enableRedis=true
+        --set global.enableGatewayAPI=true
+        --set higress-console.service.type=NodePort
+      failed_when: false
+  when:
+    - (higress_check.stdout.find("deployed") == -1) or (higress_check.stdout.find("2.1.7") == -1)
+
+- name: Higress | Importing Higress status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"higress": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3
