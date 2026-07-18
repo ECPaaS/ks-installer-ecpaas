@@ -18,6 +18,7 @@ metadata:
       "role-template-manage-volume-snapshots",
       "role-template-manage-volume-snapshot-classes",
       "role-template-manage-volumes",
+      "role-template-manage-virtualization",
       "role-template-view-crds",
       "role-template-view-components",
       "role-template-view-cluster-settings",
@@ -33,7 +34,8 @@ metadata:
       "role-template-view-storageclasses",
       "role-template-view-volume-snapshots",
       "role-template-view-volume-snapshot-classes",
-      "role-template-view-volumes"]'
+      "role-template-view-volumes",
+      "role-template-view-virtualization"]'
   name: cluster-admin
 rules:
   - apiGroups:
@@ -68,7 +70,8 @@ metadata:
       "role-template-view-storageclasses",
       "role-template-view-volume-snapshots",
       "role-template-view-volume-snapshot-classes",
-      "role-template-view-volumes"]'
+      "role-template-view-volumes",
+      "role-template-view-virtualization"]'
   name: cluster-viewer
 rules:
   - apiGroups:
@@ -3465,3 +3468,50 @@ role:
         - 'devopsprojects'
       verbs:
         - '*'
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Virtualization
+    kubesphere.io/alias-name: Virtualization View
+    iam.kubesphere.io/role-template-rules: '{"virtualization": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+    scope.kubesphere.io/cluster: ""
+  name: role-template-view-virtualization
+rules:
+  - apiGroups:
+      - virtualization.ecpaas.io
+    resources:
+      - virtualmachines
+      - imagetemplates
+      - diskvolumes
+    verbs:
+      - get
+      - list
+      - watch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-virtualization"]'
+    iam.kubesphere.io/module: Virtualization
+    kubesphere.io/alias-name: Virtualization Management
+    iam.kubesphere.io/role-template-rules: '{"virtualization": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+    scope.kubesphere.io/cluster: ""
+  name: role-template-manage-virtualization
+rules:
+  - apiGroups:
+      - virtualization.ecpaas.io
+    resources:
+      - virtualmachines
+      - imagetemplates
+      - diskvolumes
+    verbs:
+      - '*'

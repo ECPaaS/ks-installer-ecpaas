@@ -1,4 +1,4 @@
-REPO?=ecpaas-dockerhub.atan-networks.com.cn/kubesphere/ks-installer
+REPO?=ecpaas.dockerhub.my-openwifi.cloud/kubesphere/ks-installer
 TAG?=ecpaas-v332
 
 build:
